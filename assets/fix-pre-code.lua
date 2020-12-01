@@ -8,7 +8,6 @@ local languages = {"abap","abnf","actionscript","ada","al","antlr4","apacheconf"
 
 local function checkClassIsLanguage(name)
   -- returns index of the programming language if found or -1 if not found.
-  -- TODO: this is spaghetti. use hash set.
   for i, val in ipairs(languages) do
     if val == name then
       return i

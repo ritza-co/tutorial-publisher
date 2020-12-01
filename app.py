@@ -1,19 +1,19 @@
+from flask import Flask, request
+from flask import send_from_directory
+from flask import redirect
+from werkzeug.utils import secure_filename
+
 import os
 import random
 import string
 import subprocess
 
-from flask import Flask, request
-from flask import send_from_directory
-from werkzeug.utils import secure_filename
-
 ALLOWED_EXTENSIONS = {'md', 'markdown'}
-
-app = Flask(__name__)
-
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def publish_tutorial():
@@ -31,16 +31,11 @@ def publish_tutorial():
             out_html = out_noex + ".html"
             out_html_final = out_noex + "f" + ".html"
 
-            assets_path = os.path.join(os.getcwd(), "assets")
-            pandoc_filter = os.path.join(assets_path, "fix-pre-code.lua")
-
             fle.save(out_md)
 
             title = ""
             metadescription = ""
             try:
-                # try find a reasonable title and metadescription from the 
-                # markdown content
                 with open(out_md) as f:
                     head = [next(f) for x in range(10)]
                     head = [x for x in head if len(x) > 2]
@@ -49,6 +44,9 @@ def publish_tutorial():
                     metadescription = ' '.join(head[1:3])[:150]
             except Exception as e:
                 print(e)
+
+            assets_path = os.path.join(os.getcwd(), "assets")
+            pandoc_filter = os.path.join(assets_path, "fix-pre-code.lua")
 
             try:
                 output = subprocess.check_output([
@@ -87,15 +85,15 @@ def publish_tutorial():
                 return "Sorry :( something went wrong."
 
     return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <p>Upload a markdown file and get a beautiful HTML file with code highlighting in return</p>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    '''
+        <!doctype html>
+        <title>Upload new File</title>
+        <h1>Upload new File</h1>
+        <p>Upload a markdown file and get a beautiful HTML file with code highlighting in return</p>
+        <form method=post enctype=multipart/form-data>
+        <input type=file name=file>
+        <input type=submit value=Upload>
+        </form>
+        '''
 
 if __name__ == "__main__":
     app.run("0.0.0.0")
