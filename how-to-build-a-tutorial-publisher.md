@@ -29,6 +29,8 @@ The final Python application will consist of the following:
 - [PrismJS](https://prismjs.com/) for syntax highlighting.
 - [Pandoc](https://pandoc.org/) for the Markdown to HTML conversion with a Pandoc filter to make the HTML output play nicely with PrismJS.
 
+This project repository is also available [here on GitHub](https://github.com/ritza-co/tutorial-publisher).
+
 ## Setting up the environment
 
 ### Installing Flask
